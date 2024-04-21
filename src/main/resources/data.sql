@@ -1,23 +1,36 @@
- --Insert cuisines
-INSERT INTO cuisines (name) VALUES ('Asian'), ('Mexican'), ('Indian');
+-- Inserting into 'restaurants' if not already exists
+INSERT INTO restaurants (id, name, is_kosher, average_Rating)
+SELECT 1, 'Taizu', false, 4.83
+WHERE NOT EXISTS (
+    SELECT 1 FROM restaurants WHERE id = 1
+);
 
- --Insert restaurants
-INSERT INTO restaurants (name, is_kosher, rating) VALUES ('Taizu', false, 4.83);
+-- Inserting into 'cuisines' if not already exists
+INSERT INTO cuisines (id, name)
+SELECT 1, 'Asian' WHERE NOT EXISTS (SELECT 1 FROM cuisines WHERE name = 'Asian');
+INSERT INTO cuisines (id, name)
+SELECT 2, 'Mexican' WHERE NOT EXISTS (SELECT 1 FROM cuisines WHERE name = 'Mexican');
+INSERT INTO cuisines (id, name)
+SELECT 3, 'Indian' WHERE NOT EXISTS (SELECT 1 FROM cuisines WHERE name = 'Indian');
 
- --Map cuisines to the restaurant
-INSERT INTO restaurant_cuisines (restaurant_id, cuisine_id) VALUES (1, 1), (1, 2), (1, 3);
+-- Inserting into 'restaurant_cuisines' if not already exists
+INSERT INTO restaurant_cuisines (restaurant_id, cuisine_id)
+SELECT 1, 1 WHERE NOT EXISTS (SELECT 1 FROM restaurant_cuisines WHERE restaurant_id = 1 AND cuisine_id = 1);
+INSERT INTO restaurant_cuisines (restaurant_id, cuisine_id)
+SELECT 1, 2 WHERE NOT EXISTS (SELECT 1 FROM restaurant_cuisines WHERE restaurant_id = 1 AND cuisine_id = 2);
+INSERT INTO restaurant_cuisines (restaurant_id, cuisine_id)
+SELECT 1, 3 WHERE NOT EXISTS (SELECT 1 FROM restaurant_cuisines WHERE restaurant_id = 1 AND cuisine_id = 3);
 
- --Insert dishes for Taizu
-iNSERT INTO dishes (restaurant_id, name, description, price) VALUES
-(1, 'Noodles', 'Amazing one', 59),
-(1, 'Shakshuka', 'Great one', 34),
-(1, 'Humus', 'Good one', 48);
+-- Inserting into 'dishes' if not already exists
+-- Insert 'Noodles' if it does not exist
+INSERT INTO dishes (id, restaurant_id, name, description, price)
+SELECT 1, 1, 'Noodles', 'Amazing one', 59 WHERE NOT EXISTS (
+    SELECT 1 FROM dishes WHERE restaurant_id = 1 AND name = 'Noodles'
+);
 
- --Insert a rating
-INSERT INTO ratings (restaurant_id, rating) VALUES (1, 4.83);
+-- Insert 'Humus' if it does not exist
+INSERT INTO dishes (id, restaurant_id, name, description, price)
+SELECT 2, 1, 'Humus', 'Good one', 48 WHERE NOT EXISTS (
+    SELECT 1 FROM dishes WHERE restaurant_id = 1 AND name = 'Humus'
+);
 
- --Insert an order
-INSERT INTO orders (restaurant_id) VALUES (1);
-
- --Insert order items
-INSERT INTO order_items (order_id, dish_id, amount) VALUES (1, 1, 2), (1, 2, 1);
