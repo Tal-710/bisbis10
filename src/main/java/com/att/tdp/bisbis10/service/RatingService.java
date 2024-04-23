@@ -1,20 +1,31 @@
 package com.att.tdp.bisbis10.service;
 
 import com.att.tdp.bisbis10.entity.Restaurant;
+import com.att.tdp.bisbis10.repository.RestaurantRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 
-@Service // Marks this class as a service component within the Spring framework, indicating it contains business logic.
+@Service
 public class RatingService {
 
-    @Transactional // Ensures that the method is executed within a transactional context, which is crucial for maintaining data consistency.
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
+    @Transactional
     public Restaurant updateRestaurantRating(Restaurant restaurant, Double rating) {
-        // Converts the double rating to BigDecimal and updates the restaurant's rating.
-        // BigDecimal is used for precise arithmetic operations, particularly important for financial calculations or ratings.
+        // Validation inside the service
+        if (rating == null || rating < 0 || rating > 10) {
+            throw new IllegalArgumentException("Invalid rating: " + rating);
+        }
+
+        // Assuming updateRating is a method within the Restaurant entity that sets the new rating
         restaurant.updateRating(BigDecimal.valueOf(rating));
 
-        // Returns the restaurant entity after updating its rating.
-        return restaurant;
+        // Save and return the updated restaurant
+        return restaurantRepository.save(restaurant);
     }
 }
+
+

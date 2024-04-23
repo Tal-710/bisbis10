@@ -28,7 +28,7 @@ public class RestaurantController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/cuisine/{cuisine}") // Method to handle GET requests for restaurants by cuisine type.
+    @GetMapping("/{cuisine}") // Method to handle GET requests for restaurants by cuisine type.
     public ResponseEntity<List<Restaurant>> getRestaurantsByCuisine(@PathVariable String cuisine) {
         return ResponseEntity.ok(restaurantService.getRestaurantsByCuisine(cuisine));
     }

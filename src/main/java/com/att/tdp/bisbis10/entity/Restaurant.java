@@ -1,5 +1,6 @@
 package com.att.tdp.bisbis10.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -13,10 +14,10 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Automatically generates the value for 'id' using the database's identity column.
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private boolean isKosher;
 
     @Column(name = "total_ratings", precision = 10, scale = 2)
@@ -25,7 +26,8 @@ public class Restaurant {
     @Column(name = "number_of_ratings")
     private int numberOfRatings = 0;
 
-    @Column(name = "average_rating", precision = 4, scale = 2) // Defines the precision and scale for decimal 'average_rating'.
+    @Column(name = "average_rating", precision = 4, scale = 2)
+    @JsonProperty("averageRating")// Defines the precision and scale for decimal 'average_rating'.
     private BigDecimal averageRating = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)

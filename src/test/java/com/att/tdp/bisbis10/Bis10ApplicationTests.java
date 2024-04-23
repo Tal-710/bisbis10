@@ -1,28 +1,35 @@
 package com.att.tdp.bisbis10;
 
+import com.att.tdp.bisbis10.DTO.RatingDTO;
 import com.att.tdp.bisbis10.entity.Restaurant;
 import com.att.tdp.bisbis10.repository.RestaurantRepository;
 import com.att.tdp.bisbis10.service.RestaurantService;
+import com.att.tdp.bisbis10.service.RatingService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc // Configures MockMvc for testing Spring MVC controllers without starting a full HTTP server.
 class Bis10ApplicationTests {
+
 
 	@Autowired
 	private RestaurantRepository restaurantRepository;
@@ -33,11 +40,55 @@ class Bis10ApplicationTests {
 	@MockBean // Creates a mock implementation for the RestaurantService to be used in testing.
 	private RestaurantService restaurantService;
 
+	@MockBean
+	private RatingService ratingService;
+
+
 	@Autowired
 	private ObjectMapper objectMapper;
 
 	@Test
 	void contextLoads() {
+	}
+
+	@Test
+	public void addRestaurantRatingUnitTest() throws Exception {
+		// Setup the initial state of the restaurant
+		Restaurant mockRestaurant = new Restaurant("Taizu", false, BigDecimal.valueOf(4.8));
+		mockRestaurant.setId(1L);
+		mockRestaurant.setNumberOfRatings(2);
+		mockRestaurant.setTotalRatings(BigDecimal.valueOf(9.6));
+
+		// Setup the expected state after adding the new rating
+		BigDecimal newRating = BigDecimal.valueOf(9.0);
+		BigDecimal newTotalRatings = mockRestaurant.getTotalRatings().add(newRating);
+		int newNumberOfRatings = mockRestaurant.getNumberOfRatings() + 1;
+		BigDecimal newAverageRating = newTotalRatings.divide(BigDecimal.valueOf(newNumberOfRatings), 2, RoundingMode.HALF_UP);
+
+		// Mock the service to return the updated restaurant
+		when(restaurantService.getRestaurantById(1L)).thenReturn(Optional.of(mockRestaurant));
+		when(ratingService.updateRestaurantRating(any(Restaurant.class), eq(9.0))).thenAnswer(invocation -> {
+			mockRestaurant.setTotalRatings(newTotalRatings);
+			mockRestaurant.setNumberOfRatings(newNumberOfRatings);
+			mockRestaurant.setRating(newAverageRating);
+			return mockRestaurant;
+		});
+
+		// Prepare the DTO and JSON payload
+		RatingDTO ratingDTO = new RatingDTO(1L, 9.0);
+		String requestBodyJson = new ObjectMapper().writeValueAsString(ratingDTO);
+
+		// Perform the POST request and verify the new average
+		mockMvc.perform(post("/ratings")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(requestBodyJson))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.name").value("Taizu"))
+				.andExpect(jsonPath("$.averageRating").value(newAverageRating.doubleValue()));
+
+		// Verify interactions
+		verify(restaurantService).getRestaurantById(1L);
+		verify(ratingService).updateRestaurantRating(mockRestaurant, 9.0);
 	}
 
 	@Test
@@ -48,6 +99,7 @@ class Bis10ApplicationTests {
 		assertFalse(restaurants.isEmpty()); // Ensures that the result is not empty.
 		assertTrue(restaurants.stream().anyMatch(restaurant -> restaurant.getName().equals("Taizu"))); // Checks if any restaurant matches the expected name.
 	}
+
 
 	@Test
 	void createOrderTest() throws Exception {
