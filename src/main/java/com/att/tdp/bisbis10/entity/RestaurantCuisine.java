@@ -28,40 +28,42 @@ public class RestaurantCuisine {
     }
 
     public RestaurantCuisine(Restaurant restaurant, Cuisine cuisine) {
+        super();
         this.restaurant = restaurant;
         this.cuisine = cuisine;
         this.restaurantId = restaurant.getId();  // Ensure the restaurant ID is set
         this.cuisineId = cuisine.getId();        // Ensure the cuisine ID is set
     }
 
-    // Getters and Setters
+    // Getters
     public Long getRestaurantId() {
         return restaurantId;
-    }
-
-    public void setRestaurantId(Long restaurantId) {
-        this.restaurantId = restaurantId;
     }
 
     public Long getCuisineId() {
         return cuisineId;
     }
 
-    public void setCuisineId(Long cuisineId) {
-        this.cuisineId = cuisineId;
-    }
-
     public Restaurant getRestaurant() {
         return restaurant;
+    }
+
+    public Cuisine getCuisine() {
+        return cuisine;
+    }
+
+    // Setters
+    public void setRestaurantId(Long restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    public void setCuisineId(Long cuisineId) {
+        this.cuisineId = cuisineId;
     }
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
         this.restaurantId = restaurant != null ? restaurant.getId() : null;
-    }
-
-    public Cuisine getCuisine() {
-        return cuisine;
     }
 
     public void setCuisine(Cuisine cuisine) {

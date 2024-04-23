@@ -17,12 +17,12 @@ public class RatingDTO {
         return restaurantId;
     }
 
-    public void setRestaurantId(Long restaurantId) { // Setter is correctly typed
-        this.restaurantId = restaurantId;
-    }
-
     public Double getRating() {
         return rating;
+    }
+
+    public void setRestaurantId(Long restaurantId) { // Setter is correctly typed
+        this.restaurantId = restaurantId;
     }
 
     public void setRating(Double rating) {
