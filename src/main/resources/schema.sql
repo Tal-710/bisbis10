@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS restaurants (
 -- Create Cuisines Table
 CREATE TABLE IF NOT EXISTS cuisines (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE
+    name VARCHAR(100) NOT NULL
 );
 
 -- Create Restaurant Cuisines Junction Table
