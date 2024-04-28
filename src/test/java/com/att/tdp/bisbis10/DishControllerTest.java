@@ -88,7 +88,7 @@ public class DishControllerTest {
         Dish dish2 = new Dish("Falafel", "Delicious", BigDecimal.valueOf(30), null);
         List<Dish> dishes = Arrays.asList(dish1, dish2);
 
-        lenient().when(dishRepository.findAllByRestaurantId(1L)).thenReturn(dishes); // Use lenient to avoid stubbing issues.
+        lenient().when(dishRepository.findAllByRestaurantId(1L)).thenReturn(dishes);
 
         mockMvc = MockMvcBuilders.standaloneSetup(new DishController(dishService)).build();
 

@@ -1,7 +1,5 @@
 package com.att.tdp.bisbis10.DTO;
 
-import com.att.tdp.bisbis10.entity.Restaurant;
-
 public class RatingDTO {
     private Long restaurantId;  // Correctly typed as Long
     private Double rating;

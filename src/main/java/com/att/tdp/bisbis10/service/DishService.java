@@ -28,7 +28,7 @@ public class DishService {
     }
 
     public List<Dish> getAllDishesByRestaurant(Long restaurantId) {
-        return dishRepository.findAllByRestaurantId(restaurantId); // This is a placeholder and should be adjusted to filter by restaurant.
+        return dishRepository.findAllByRestaurantId(restaurantId);
     }
 
     public void deleteDish(Long id) {
