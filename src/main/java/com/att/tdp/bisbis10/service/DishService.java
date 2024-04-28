@@ -12,7 +12,7 @@ public class DishService {
 
     private final DishRepository dishRepository; // Dependency injection of the DishRepository interface.
 
-    @Autowired // Autowiring feature of spring framework enables you to inject the object dependency implicitly.
+    @Autowired
     public DishService(DishRepository dishRepository) {
         this.dishRepository = dishRepository; // Assigns the injected DishRepository to the local variable.
     }
@@ -28,8 +28,7 @@ public class DishService {
     }
 
     public List<Dish> getAllDishesByRestaurant(Long restaurantId) {
-        // Currently, this method incorrectly retrieves all dishes regardless of restaurant ID. Needs fixing to filter by restaurantId.
-        return dishRepository.findAll(); // This is a placeholder and should be adjusted to filter by restaurant.
+        return dishRepository.findAllByRestaurantId(restaurantId); // This is a placeholder and should be adjusted to filter by restaurant.
     }
 
     public void deleteDish(Long id) {
