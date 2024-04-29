@@ -32,7 +32,7 @@ public class DishController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/restaurants/{restaurantId}/dishes") // Maps HTTP GET requests to fetch all dishes in a restaurant.
+    @GetMapping// Maps HTTP GET requests to fetch all dishes in a restaurant.
     public ResponseEntity<List<Dish>> getAllDishes(@PathVariable Long restaurantId) {
         return ResponseEntity.ok(dishService.getAllDishesByRestaurant(restaurantId));
     }
