@@ -10,12 +10,6 @@ The system provides the following APIs:
 - **Ratings API**: Manages customer ratings for restaurants.
 - **Dishes API**: Manages the dishes offered by each restaurant.
 
-## Technical Aspects
-The system is built using Java Spring Boot, leveraging its robust framework for creating RESTful APIs. Data persistence can be managed using an in-memory database like H2 for simplicity, or a more robust solution like PostgreSQL for production.
-
-## Homework Task
-Candidates are expected to design and implement the above APIs, adhering to RESTful principles.
-
 ## APIs
 
 ### Restaurants APIs
