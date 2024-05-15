@@ -96,6 +96,17 @@ class Bis10ApplicationTests {
 		assertFalse(restaurants.isEmpty()); // Ensures that the result is not empty.
 		assertTrue(restaurants.stream().anyMatch(restaurant -> restaurant.getName().equals("Taizu"))); // Checks if any restaurant matches the expected name.
 	}
+	@Test
+		public void testFindByCuisine_NotExist() {
+		// Given a cuisine name that does not exist
+		String nonExistentCuisine = "aaa";
+
+		// When fetching restaurants by the non-existent cuisine
+		List<Restaurant> restaurants = restaurantRepository.findRestaurantsByCuisineName(nonExistentCuisine);
+
+		// Then the result should be empty
+		assertTrue(restaurants.isEmpty(), "The list of restaurants should be empty for a non-existent cuisine");
+}
 
 
 	@Test

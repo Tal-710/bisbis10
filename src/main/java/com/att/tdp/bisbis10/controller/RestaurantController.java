@@ -20,7 +20,7 @@ public class RestaurantController {
         return ResponseEntity.ok(restaurantService.getAllRestaurants());
     }
 
-    @GetMapping("/{id}") // Method to handle GET requests for a specific restaurant by ID.
+    @GetMapping("/{id:[\\d]+}") // Matches only numeric path variables
     public ResponseEntity<Restaurant> getRestaurantById(@PathVariable Long id) {
         // Returns the restaurant if found, or an HTTP 404 if not.
         return restaurantService.getRestaurantById(id)
@@ -28,7 +28,7 @@ public class RestaurantController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/{cuisine}") // Method to handle GET requests for restaurants by cuisine type.
+    @GetMapping("/{cuisine:[^\\d]+}") // Matches only non-numeric path variables
     public ResponseEntity<List<Restaurant>> getRestaurantsByCuisine(@PathVariable String cuisine) {
         return ResponseEntity.ok(restaurantService.getRestaurantsByCuisine(cuisine));
     }

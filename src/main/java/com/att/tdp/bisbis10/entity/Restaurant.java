@@ -116,8 +116,6 @@ public class Restaurant {
         this.restaurantCuisines = restaurantCuisines;
     }
 
-    // Additional methods
-
     // Updates the restaurant rating with a new rating value.
     public void updateRating(BigDecimal newRating) {
         this.totalRatings = this.totalRatings.add(newRating); // Adds new rating to total.
